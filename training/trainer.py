@@ -135,7 +135,7 @@ class Trainer:
         if device_str == "cuda" and torch.cuda.is_available():
             device = torch.device("cuda")
             gpu_name = torch.cuda.get_device_name(0)
-            vram_gb = torch.cuda.get_device_properties(0).total_mem / (1024**3)
+            vram_gb = torch.cuda.get_device_properties(0).total_memory / (1024**3)
             logger.info(f"Using GPU: {gpu_name} ({vram_gb:.1f} GB VRAM)")
             return device
         else:
@@ -222,7 +222,7 @@ class Trainer:
                 logger.error("  5. Increase gradient_accumulation_steps")
                 if torch.cuda.is_available():
                     logger.error(f"  VRAM: {torch.cuda.memory_allocated()/1e9:.1f}GB / "
-                                f"{torch.cuda.get_device_properties(0).total_mem/1e9:.1f}GB")
+                                f"{torch.cuda.get_device_properties(0).total_memory/1e9:.1f}GB")
                 raise
             raise
         
