@@ -18,6 +18,7 @@ accelerate>=0.30.0             # Training acceleration and mixed precision helpe
 
 # --- Terminal UI ---
 rich>=13.7.0                   # Beautiful terminal output, progress bars, panels
+questionary                    # Interactive command-line prompts
 
 # --- Data Processing ---
 numpy>=1.26.0                  # Numerical operations
