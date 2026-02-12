@@ -1,0 +1,48 @@
+# =========================================================================
+# AetherMind Local Training Config - Quick Test (Mini)
+# =========================================================================
+# Target: RTX 3050 Ti, 4GB VRAM
+# Dataset: 5,000 samples (Quick Test)
+# Model: Mini (350M) - Tuned for 4GB VRAM (Batch Size 1)
+# =========================================================================
+
+hardware:
+  device: "cuda" # "cuda" or "cpu"
+  precision: "fp16" # "fp32", "fp16", "bf16"
+  gradient_checkpointing: true # CRITICAL: Must be true for Mini on 4GB VRAM
+  pin_memory: true # Faster CPU to GPU data transfer
+  compile_model: false # torch.compile()
+
+model:
+  variant: "mini" # "mini" (350M)
+  context_length: 1024 # Max sequence length
+
+training:
+  batch_size: 1 # Reduced to 1 to prevent OOM
+  gradient_accumulation_steps: 16 # Increased to maintain effective batch size (1*16=16)
+  num_epochs: 3 # Total training epochs
+  learning_rate: 3.0e-4 # Peak learning rate
+  weight_decay: 0.1 # AdamW weight decay
+  max_grad_norm: 1.0 # Gradient clipping threshold
+  warmup_ratio: 0.02 # 2% of total steps for LR warmup
+  lr_scheduler: "cosine" # "cosine" or "linear" decay
+  use_8bit_optimizer: false # bitsandbytes 8-bit AdamW
+  adam_beta1: 0.9 # Adam first moment decay
+  adam_beta2: 0.95 # Adam second moment decay
+  adam_epsilon: 1.0e-8 # Adam epsilon
+
+checkpointing:
+  save_every_n_steps: 100 # Save checkpoint every 100 steps
+  keep_last_n: 2 # Keep last 2 checkpoints
+  output_dir: "outputs/checkpoints_mini_5k"
+  final_model_dir: "outputs/final_mini_5k"
+
+data:
+  num_workers: 2 # DataLoader workers
+  max_samples: 5000 # <--- ONLY USE 5000 EXAMPLES
+  shuffle: true # Shuffle training data each epoch
+
+logging:
+  log_every_n_steps: 5 # Print metrics every 5 steps
+  log_dir: "outputs/logs_mini_5k"
+  use_rich_ui: true # Use Rich terminal dashboard
