@@ -1,0 +1,39 @@
+# =========================================================================
+# AetherMind — Requirements
+# =========================================================================
+# Install PyTorch FIRST with the correct CUDA wheel:
+#   pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu126
+#
+# Then install the rest:
+#   pip install -r requirements.txt
+# =========================================================================
+
+# --- Core ML ---
+transformers>=4.40.0           # Hugging Face transformers (tokenizer utilities)
+datasets>=2.19.0               # Hugging Face datasets (dataset downloading)
+tokenizers>=0.19.0             # Fast tokenizer backend
+
+# --- Training Optimization ---
+accelerate>=0.30.0             # Training acceleration and mixed precision helpers
+
+# --- Terminal UI ---
+rich>=13.7.0                   # Beautiful terminal output, progress bars, panels
+
+# --- Data Processing ---
+numpy>=1.26.0                  # Numerical operations
+tqdm>=4.66.0                   # Progress bars for data processing
+
+# --- Config Management ---
+pyyaml>=6.0.1                  # YAML config file parsing
+omegaconf>=2.3.0               # Hierarchical config management
+
+# --- Utilities ---
+einops>=0.8.0                  # Elegant tensor rearranging operations
+safetensors>=0.4.3             # Safe and fast model serialization
+huggingface_hub>=0.22.0        # Downloading models and datasets from HF Hub
+
+# --- Optional Dependencies (installed separately if needed) ---
+# bitsandbytes>=0.43.0         # 8-bit optimizer — Linux only, may fail on Windows
+# flash-attn>=2.5.0            # Flash Attention 2 — Linux only, complex build
+# pytermgui>=7.7.0             # Terminal UI widgets — optional for chat UI
+# deepspeed>=0.14.0            # ZeRO optimization — Colab only

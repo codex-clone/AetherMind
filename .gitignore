@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.python-version
+.venv/
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project-specific
+Agents.MD
+Prompt.MD
+
+# Training outputs (large files)
+outputs/
+data/cache/
+data/train.jsonl
+data/*.jsonl
+
+# Temp builder scripts
+_build_*.py
+_create_*.py
+_fix_*.py
+_test_*.py
+_inspect_*.py
+_parts/
+
+# HuggingFace cache
+.cache/
+
+# Logs
+*.log
+*.sqlite

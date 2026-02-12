@@ -1,0 +1,55 @@
+# =========================================================================
+# AetherMind - Model Architecture Configuration
+# =========================================================================
+# Defines the Forge-1 model variants and their architecture parameters.
+# Each variant is designed for a specific VRAM budget.
+# =========================================================================
+
+# --- Forge-1-Nano: ~125M parameters ---
+# Fits comfortably in 4GB VRAM with FP16.
+# Ideal for: RTX 3050 Ti, GTX 1650, and similar 4GB GPUs.
+nano:
+  num_layers: 12                # Number of transformer decoder layers
+  hidden_dim: 768               # Hidden dimension (embedding size)
+  num_heads: 12                 # Number of attention heads
+  num_kv_heads: 4               # Number of key/value heads for GQA
+  intermediate_dim: 2048        # FFN intermediate dimension (SwiGLU)
+  context_length: 1024          # Maximum sequence length in tokens
+  vocab_size: 50304             # Padded to multiple of 64 for efficiency
+  dropout: 0.0                  # Dropout rate (0 for pretraining)
+  rope_theta: 10000.0           # RoPE base frequency (standard)
+  norm_eps: 1.0e-5              # RMSNorm epsilon for numerical stability
+  tie_word_embeddings: true     # Share input embedding and output projection weights
+
+# --- Forge-1-Mini: ~350M parameters ---
+# Fits in 15GB VRAM (Colab T4) with mixed precision.
+# Better quality than Nano, but too large for 4GB VRAM.
+mini:
+  num_layers: 24                # Deeper network for better representation
+  hidden_dim: 1024              # Wider hidden dimension
+  num_heads: 16                 # More attention heads
+  num_kv_heads: 4               # GQA with 4 KV heads (each serves 4 Q heads)
+  intermediate_dim: 2816        # FFN intermediate dim (~2.75x hidden_dim)
+  context_length: 1024          # Same context length as Nano
+  vocab_size: 50304             # Same tokenizer vocabulary
+  dropout: 0.0                  # Dropout rate
+  rope_theta: 10000.0           # RoPE base frequency
+  norm_eps: 1.0e-5              # RMSNorm epsilon
+  tie_word_embeddings: true     # Share input/output embedding weights
+
+# --- Special Token Definitions ---
+# These tokens structure the conversation format for Forge-1.
+# Actual token IDs are assigned dynamically when the tokenizer loads.
+special_tokens:
+  - "<|pad|>"
+  - "<|bos|>"
+  - "<|eos|>"
+  - "<|system|>"
+  - "<|/system|>"
+  - "<|user|>"
+  - "<|/user|>"
+  - "<|assistant|>"
+  - "<|/assistant|>"
+  - "<|think|>"
+  - "<|/think|>"
+  - "<|no_think|>"

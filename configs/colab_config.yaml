@@ -1,0 +1,47 @@
+# =========================================================================
+# AetherMind Colab Training Config
+# =========================================================================
+# Target: Google Colab Free Tier, T4 GPU, 15GB VRAM
+# More relaxed memory settings since T4 has plenty of VRAM.
+# Important: Checkpoints save to Google Drive for persistence.
+# =========================================================================
+
+hardware:
+  device: "cuda"                    # Always CUDA on Colab
+  precision: "bf16"                 # T4 supports bf16 - better numerical stability
+  gradient_checkpointing: false     # Not needed on T4 - saves compute time
+  pin_memory: false                 # Behaves differently on Colab
+  compile_model: false              # Disabled for compatibility
+
+model:
+  variant: "mini"                   # Can fit 350M on T4 with room to spare
+  context_length: 1024              # Full context length
+
+training:
+  batch_size: 8                     # Larger batches possible on T4
+  gradient_accumulation_steps: 4    # Effective batch = 8 * 4 = 32
+  num_epochs: 3                     # Total training epochs
+  learning_rate: 3.0e-4             # Peak learning rate
+  weight_decay: 0.1                 # AdamW weight decay
+  max_grad_norm: 1.0                # Gradient clipping
+  warmup_ratio: 0.02                # 2% warmup
+  lr_scheduler: "cosine"            # Cosine decay after warmup
+  use_8bit_optimizer: false         # Not needed on Colab
+  adam_beta1: 0.9                   # Adam beta1
+  adam_beta2: 0.95                  # Adam beta2 (LLM standard)
+  adam_epsilon: 1.0e-8              # Adam epsilon
+
+checkpointing:
+  save_every_n_steps: 200           # Save often - Colab sessions can die
+  keep_last_n: 5                    # Keep more checkpoints
+  output_dir: "/content/drive/MyDrive/AetherMind/checkpoints"
+
+data:
+  num_workers: 4                    # More workers on Colab
+  max_samples: null                 # Use full dataset
+  shuffle: true                     # Shuffle each epoch
+
+logging:
+  log_every_n_steps: 10             # Print metrics every N steps
+  log_dir: "/content/drive/MyDrive/AetherMind/logs"
+  use_rich_ui: true                 # Rich dashboard works in Colab too
