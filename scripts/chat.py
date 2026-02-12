@@ -62,10 +62,17 @@ def main():
     
     # Load weights
     checkpoint = torch.load(args.model, map_location="cpu", weights_only=False)
-    if "model_state_dict" in checkpoint:
-        model.load_state_dict(checkpoint["model_state_dict"])
-    else:
-        model.load_state_dict(checkpoint)
+    state_dict = checkpoint["model_state_dict"] if "model_state_dict" in checkpoint else checkpoint
+
+    # Check for embedding size mismatch and resize if needed
+    if "token_embedding.weight" in state_dict:
+        ckpt_vocab_size = state_dict["token_embedding.weight"].shape[0]
+        if ckpt_vocab_size != config.vocab_size:
+            print(f"Resizing model embeddings from {config.vocab_size} to {ckpt_vocab_size} to match checkpoint")
+            config.vocab_size = ckpt_vocab_size
+            model = Forge1Model(config)
+    
+    model.load_state_dict(state_dict)
     
     model = model.to(device)
     model.eval()
